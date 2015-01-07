@@ -208,5 +208,26 @@ namespace Autofac.Tests.Features.Collections
 
             Assert.Throws<ComponentNotRegisteredException>(() => c.Resolve<ReadOnlyCollection<string>>());
         }
+
+        class ToInject
+        {
+            public string[] Properties { get; set; }
+        }
+
+        [Test]
+        public void InjectCollectionOfUnknownElementType()
+        {
+            var cb = new ContainerBuilder();
+            var container = cb.Build();
+
+            var properties = new[] { "A", "B", "C" };
+            var toInject = new ToInject
+            {
+                Properties = properties
+            };
+
+            container.InjectProperties(toInject);
+            Assert.AreSame(properties, toInject.Properties);
+        }
     }
 }
